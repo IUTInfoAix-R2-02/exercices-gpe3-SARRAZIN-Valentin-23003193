@@ -62,7 +62,7 @@ public class TicTacToe extends Application {
         seven.setGraphic(this.aleatoire());
         eight.setGraphic(this.aleatoire());
         nine.setGraphic(this.aleatoire());
-        
+
         Scene scene1 = new Scene(ticTacToe);
         primaryStage.setScene(scene1);
         primaryStage.setTitle("Tic Tac Toe");
