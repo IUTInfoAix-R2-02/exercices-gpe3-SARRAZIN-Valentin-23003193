@@ -29,12 +29,19 @@ public class JeuMain extends Application {
         // Obstacle
         ArrayList lObstacle = new ArrayList<Obstacle>();
         Obstacle grosMur = new Obstacle();
+        Obstacle petitMur =  new Obstacle();
         grosMur.setX(50);
         grosMur.setY(50);
         grosMur.setWidth(100);
         grosMur.setHeight(100);
         grosMur.setFill(Paint.valueOf("Blue"));
+        petitMur.setX(200);
+        petitMur.setY(200);
+        petitMur.setWidth(50);
+        petitMur.setHeight(50);
+        petitMur.setFill(Paint.valueOf("Black"));
         lObstacle.add(grosMur);
+        lObstacle.add(petitMur);
         // on positionne le fantôme 20 positions vers la droite
         fantome.setLayoutX(20 * 10);
         //panneau du jeu
@@ -43,6 +50,7 @@ public class JeuMain extends Application {
         jeu.getChildren().add(pacman);
         jeu.getChildren().add(fantome);
         jeu.getChildren().add(grosMur);
+        jeu.getChildren().add(petitMur);
         root.setCenter(jeu);
         //on construit une scene 640 * 480 pixels
         scene = new Scene(root);
@@ -63,7 +71,7 @@ public class JeuMain extends Application {
      * @param j1
      * @param j2
      */
-    private void deplacer(Personnage j1, Personnage j2, ArrayList lObstacle) {
+    private void deplacer(Personnage j1, Personnage j2, ArrayList<Obstacle> lObstacle) {
 
 
         scene.setOnKeyPressed((KeyEvent event) -> {
@@ -102,19 +110,16 @@ public class JeuMain extends Application {
             if (j1.estEnCollision(j2))
                 Platform.exit();
 
-            for (int i=0; i<=lObstacle.size(); ++i){
-                if (j1.estEnCollision(lObstacle.get(i))){
+            for(Obstacle o : lObstacle){
+                if (j1.estEnCollision(o)){
                     j1.setLayoutX(lastX1);
                     j1.setLayoutY(lastY1);
                 }
-            }
-
-            if (j2.estEnCollision(o1)){
-                j2.setLayoutX(lastX2);
-                j2.setLayoutY(lastY2);
+                if (j2.estEnCollision(o)){
+                    j2.setLayoutX(lastX2);
+                    j2.setLayoutY(lastY2);
+                }
             }
         });
     }
-
-
 }
