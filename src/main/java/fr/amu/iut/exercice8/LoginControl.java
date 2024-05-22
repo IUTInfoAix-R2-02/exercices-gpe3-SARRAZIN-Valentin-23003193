@@ -18,7 +18,7 @@ public class LoginControl extends GridPane {
     private Button cancel;
 
     @FXML
-    private String motCacher;
+    private String motCacher = "";
     @FXML
     private void okClicked() {
         System.out.println("Welcome " + txt.getText());
