@@ -1,15 +1,23 @@
-package fr.amu.iut.exercice1;
+package fr.amu.iut.exercice11;
 
 import javafx.application.Application;
+import javafx.beans.InvalidationListener;
+import javafx.beans.binding.Binding;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -33,6 +41,48 @@ public class Palette extends Application {
 
     private Label texteDuBas;
 
+    private IntegerProperty nbFois;
+
+
+    public int getNbFois() {
+        return nbFois.get();
+    }
+
+    public void setNbFois(int nbFois) {
+        this.nbFois.set(nbFois);
+    }
+
+    public IntegerProperty nbFoisProperty() {
+        return nbFois;
+    }
+
+    private StringProperty message;
+
+    public String getMessage() {
+        return message.get();
+    }
+
+    public void setMessage(String message) {
+        this.message.set(message);
+    }
+
+    public StringProperty messageProperty() {
+        return message;
+    }
+
+    private StringProperty couleurPanneau;
+
+    public String getCouleurPanneau() {
+        return couleurPanneau.get();
+    }
+
+    public void setCouleurPanneau(String couleurPanneau) {
+        this.couleurPanneau.set(couleurPanneau);
+    }
+
+    public StringProperty couleurPanneauProperty() {
+        return couleurPanneau;
+    }
 
     @Override
     public void start(Stage primaryStage) {
@@ -65,10 +115,42 @@ public class Palette extends Application {
         root.setTop(texteDuHaut);
         root.setBottom(bas);
 
+        this.nbFois = new SimpleIntegerProperty();
+        this.message = new SimpleStringProperty();
+        this.couleurPanneau = new SimpleStringProperty("#000000");
+
+        vert.addEventHandler(MouseEvent.MOUSE_CLICKED, actionEvent -> {
+            setNbFois(++nbVert);
+            setMessage(vert.getText());
+            setCouleurPanneau("-fx-background-color: green");
+        });
+
+        rouge.addEventHandler(MouseEvent.MOUSE_CLICKED, actionEvent -> {
+            setNbFois(++nbRouge);
+            setMessage(rouge.getText());
+            setCouleurPanneau("-fx-background-color: red");
+        });
+
+        bleu.addEventHandler(MouseEvent.MOUSE_CLICKED, actionEvent -> {
+            setNbFois(++nbBleu);
+            setMessage(bleu.getText());
+            setCouleurPanneau("-fx-background-color: blue");
+        });
+
+        createBindings();
+
         Scene scene = new Scene(root);
 
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+    private void createBindings() {
+        BooleanProperty pasEncoreDeClic = new SimpleBooleanProperty(false);
+        pasEncoreDeClic.bind(Bindings.equal(nbFois, 0));
+        texteDuHaut.textProperty().bind(Bindings.when(pasEncoreDeClic).then("Cliquer sur un bouton").otherwise(Bindings.concat(message, " choisi ", nbFois.asString(), " fois")));
+        panneau.styleProperty().bind(couleurPanneau);
+        texteDuBas.textProperty().bind(Bindings.when(pasEncoreDeClic).then("").otherwise(Bindings.concat("Le ", message, " est une jolie couleur !")));
+        texteDuBas.textFillProperty().bind(Paint.valueOf(String.valueOf(couleurPanneau)));
     }
 }
 
