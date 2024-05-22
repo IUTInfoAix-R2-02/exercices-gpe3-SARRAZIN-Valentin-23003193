@@ -1,5 +1,6 @@
 package fr.amu.iut.exercice9;
 
+import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -20,12 +21,32 @@ public class Animation extends Application {
         TranslateTransition transition1 = new TranslateTransition(duration, customButton);
         transition1.setByX(150);
         transition1.setByY(-150);
-        transition1.setAutoReverse(true);
-        transition1.setCycleCount(2);
 
-//        SequentialTransition st = new SequentialTransition(transition1, transition2, transition3, transition4, transition5);
+        TranslateTransition transition2 = new TranslateTransition(duration, customButton);
+        transition2.setByX(-300);
+        transition2.setByY(0);
 
-        customButton.setOnMousePressed(mouseEvent -> transition1.play());
+        TranslateTransition transition3 = new TranslateTransition(duration, customButton);
+        transition3.setByX(0);
+        transition3.setByY(300);
+
+        TranslateTransition transition4 = new TranslateTransition(duration, customButton);
+        transition4.setByX(300);
+        transition4.setByY(0);
+
+        TranslateTransition transition5 = new TranslateTransition(duration, customButton);
+        transition5.setByX(0);
+        transition5.setByY(-300);
+
+        TranslateTransition transition6 = new TranslateTransition(duration, customButton);
+        transition6.setByX(-150);
+        transition6.setByY(150);
+
+        SequentialTransition st = new SequentialTransition(transition1, transition2, transition3, transition4, transition5, transition6);
+        st.setAutoReverse(true);
+        st.setCycleCount(2);
+
+        customButton.setOnMousePressed(mouseEvent -> st.play());
 
         primaryStage.setTitle("Animation");
         primaryStage.setScene(scene);
