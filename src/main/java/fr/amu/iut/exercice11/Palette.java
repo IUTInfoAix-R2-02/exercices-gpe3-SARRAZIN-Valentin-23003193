@@ -21,6 +21,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.scene.paint.Color;
 
 @SuppressWarnings("Duplicates")
 public class Palette extends Application {
@@ -83,6 +84,19 @@ public class Palette extends Application {
     public StringProperty couleurPanneauProperty() {
         return couleurPanneau;
     }
+    private StringProperty couleurTexte;
+
+    public String getCouleurTexte() {
+        return couleurTexte.get();
+    }
+
+    public StringProperty couleurTexteProperty() {
+        return couleurTexte;
+    }
+
+    public void setCouleurTexte(String couleurTexte) {
+        this.couleurTexte.set(couleurTexte);
+    }
 
     @Override
     public void start(Stage primaryStage) {
@@ -118,23 +132,27 @@ public class Palette extends Application {
         this.nbFois = new SimpleIntegerProperty();
         this.message = new SimpleStringProperty();
         this.couleurPanneau = new SimpleStringProperty("#000000");
+        this.couleurTexte = new SimpleStringProperty("#000000");
 
         vert.addEventHandler(MouseEvent.MOUSE_CLICKED, actionEvent -> {
             setNbFois(++nbVert);
             setMessage(vert.getText());
             setCouleurPanneau("-fx-background-color: green");
+            setCouleurTexte("-fx-text-fill: green");
         });
 
         rouge.addEventHandler(MouseEvent.MOUSE_CLICKED, actionEvent -> {
             setNbFois(++nbRouge);
             setMessage(rouge.getText());
             setCouleurPanneau("-fx-background-color: red");
+            setCouleurTexte("-fx-text-fill: red");
         });
 
         bleu.addEventHandler(MouseEvent.MOUSE_CLICKED, actionEvent -> {
             setNbFois(++nbBleu);
             setMessage(bleu.getText());
             setCouleurPanneau("-fx-background-color: blue");
+            setCouleurTexte("-fx-text-fill: blue");
         });
 
         createBindings();
@@ -150,7 +168,7 @@ public class Palette extends Application {
         texteDuHaut.textProperty().bind(Bindings.when(pasEncoreDeClic).then("Cliquer sur un bouton").otherwise(Bindings.concat(message, " choisi ", nbFois.asString(), " fois")));
         panneau.styleProperty().bind(couleurPanneau);
         texteDuBas.textProperty().bind(Bindings.when(pasEncoreDeClic).then("").otherwise(Bindings.concat("Le ", message, " est une jolie couleur !")));
-        texteDuBas.textFillProperty().bind(Paint.valueOf(String.valueOf(couleurPanneau)));
+        texteDuBas.styleProperty().bind(couleurTexte);
     }
 }
 
