@@ -1,4 +1,4 @@
-package fr.amu.iut.exercice2;
+package fr.amu.iut.exercice12;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -60,17 +60,42 @@ public class Palette extends Application {
 
         gestionnaireEvenement = (event) -> {
             sourceOfEvent = (CustomButton) event.getSource();
+            sourceOfEvent.setNbClics(sourceOfEvent.getNbClics() + 1);
         };
 
         vert.setOnAction(gestionnaireEvenement);
         rouge.setOnAction(gestionnaireEvenement);
         bleu.setOnAction(gestionnaireEvenement);
 
+        vert.nbClicsProperty().addListener(
+                (source, ancienneValeur, nouvelleValeur) -> {
+                    texteDuHaut.setText("Vert choisi " + nouvelleValeur.toString() + " fois");
+                    panneau.setStyle("-fx-background-color: green");
+                    texteDuBas.setText("Le " + vert.getText() + " est une jolie couleur");
+                    texteDuBas.setStyle("-fx-text-fill: green");
+                });
+
+        rouge.nbClicsProperty().addListener(
+                (source, ancienneValeur, nouvelleValeur) -> {
+                    texteDuHaut.setText("Rouge choisi " + nouvelleValeur.toString() + " fois");
+                    panneau.setStyle("-fx-background-color: red");
+                    texteDuBas.setText("Le " + rouge.getText() + " est une jolie couleur");
+                    texteDuBas.setStyle("-fx-text-fill: red");
+                });
+
+        bleu.nbClicsProperty().addListener(
+                (source, ancienneValeur, nouvelleValeur) -> {
+                    texteDuHaut.setText("Bleu choisi " + nouvelleValeur.toString() + " fois");
+                    panneau.setStyle("-fx-background-color: blue");
+                    texteDuBas.setText("Le " + bleu.getText() + " est une jolie couleur");
+                    texteDuBas.setStyle("-fx-text-fill: blue");
+                });
+
         boutons.getChildren().addAll(vert, rouge, bleu);
 
         root.setCenter(panneau);
         root.setTop(texteDuHaut);
-        root.setBottom(boutons);
+        root.setBottom(bas);
 
         Scene scene = new Scene(root);
 
