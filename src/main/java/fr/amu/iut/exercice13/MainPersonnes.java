@@ -22,7 +22,7 @@ public class MainPersonnes  {
             @Override
             public void onChanged(Change<? extends Personne> change) {
                 change.next();
-                if (change.wasAdded() == true){
+                if (change.wasAdded() == true) {
                     System.out.println("Ajout de : " + change.getAddedSubList().get(0).getNom());
                 }
                 else if (change.wasRemoved() == true) {
@@ -31,28 +31,39 @@ public class MainPersonnes  {
                 else if (change.wasUpdated() == true) {
                     System.out.println(change.getList().get(change.getFrom()).getNom() + " a maintenant " + change.getList().get(change.getFrom()).getAge() + " ans");
                 }
+                System.out.println("Test");
             }
         };
 
         plusieursChangementsListener = new ListChangeListener<Personne>() {
             @Override
             public void onChanged(Change<? extends Personne> change) {
-                change.next();
-                if (change.wasAdded() == true){
-                    for (Personne p1 : lesPersonnes)
-                        System.out.println("Ajout de : " + change.getAddedSubList().get(0).getNom());
+                while (change.next()) {
+                    if (change.wasAdded() == true) {
+                        for (int i = 0; i < change.getAddedSize(); ++i) {
+                            System.out.println("Ajout de : " + change.getAddedSubList().get(i).getNom());
+                        }
+                    }
+                    else if (change.wasRemoved() == true) {
+                        for (int i = 0; i < change.getRemovedSize(); ++i){
+                            System.out.println("Retrait de : " + change.getRemoved().get(i).getNom());
+                        }
+                    }
+                    else if (change.wasUpdated() == true) {
+                        for (int i = 0; i < change.getList().size(); ++i){
+                            if (change.getList().get(i).getAge() == 0){
+                                System.out.println("L'age de " + change.getList().get(i).getNom() + " n'a pas changé");
+                            }
+                            else System.out.println(change.getList().get(i).getNom() + " a maintenant " + change.getList().get(i).getAge() + " ans");
+                        }
+                    }
                 }
-                else if (change.wasRemoved() == true) {
-                    System.out.println("Retrait de : " + change.getRemoved().get(0).getNom());
-                }
-                else if (change.wasUpdated() == true) {
-                    System.out.println(change.getList().get(change.getFrom()).getNom() + " a maintenant " + change.getList().get(change.getFrom()).getAge() + " ans");
-                }
+                System.out.println("Test");
             }
         };
 
-        lesPersonnes.addListener(unChangementListener);
-        question3();
+        lesPersonnes.addListener(plusieursChangementsListener);
+        question5();
     }
 
     public static void question1() {
