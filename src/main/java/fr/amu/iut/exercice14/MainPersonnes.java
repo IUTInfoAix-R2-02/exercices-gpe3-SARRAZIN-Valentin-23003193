@@ -1,9 +1,13 @@
-package fr.amu.iut.exercice4;
+package fr.amu.iut.exercice14;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 
 @SuppressWarnings("Duplicates")
@@ -18,28 +22,76 @@ public class MainPersonnes {
 
     public static void main(String[] args) {
 
-        lesPersonnes = new SimpleListProperty<>(FXCollections.observableArrayList());
+        lesPersonnes = new SimpleListProperty<>(FXCollections.observableArrayList(personne -> new Observable[] {personne.ageProperty(), personne.villeDeNaissanceProperty()}));
+
+
         ageMoyen = new SimpleIntegerProperty(0);
+        nbParisiens = new SimpleIntegerProperty(0);
+
+        calculAgeMoyen = new IntegerBinding() {
+            {
+                this.bind(lesPersonnes);
+            }
+            @Override
+            protected int computeValue() {
+                int somme = 0;
+                if (lesPersonnes.size() != 0) {
+                    for (int i = 0; i < lesPersonnes.size(); ++i) {
+                        somme += lesPersonnes.get(i).getAge();
+                    }
+                    int moyenne = somme / lesPersonnes.size();
+                    return moyenne;
+                }
+                return 0;
+            }
+        };
+
+        calculnbParisiens = new IntegerBinding() {
+            {
+                this.bind(lesPersonnes);
+            }
+            @Override
+            protected int computeValue() {
+                int cpt = 0;
+                if (lesPersonnes.size() == 0){
+                    return 0;
+                }
+                for (int i = 0; i < lesPersonnes.size(); ++i){
+                    if (lesPersonnes.get(i).getVilleDeNaissance() == "Paris"){
+                        cpt += 1;
+                    }
+                }
+                return cpt;
+            }
+        };
+
+        ageMoyen.bind(calculAgeMoyen);
+        nbParisiens.bind(calculnbParisiens);
 
         question1();
-//        question2();
+        question2();
     }
 
     public static void question1() {
-        System.out.println("1 - L'age moyen est de " + ageMoyen.getValue() + " ans");
+        System.out.println("1 - L'age moyen est de " + ageMoyen.getValue() + " ans");   //0
+
         Personne pierre = new Personne("Pierre", 20);
         lesPersonnes.add(pierre);
-        System.out.println("2 - L'age moyen est de " + ageMoyen.getValue() + " ans");
+        System.out.println("2 - L'age moyen est de " + ageMoyen.getValue() + " ans");   //20
+
         Personne paul = new Personne("Paul", 40);
         lesPersonnes.add(paul);
-        System.out.println("3 - L'age moyen est de " + ageMoyen.getValue() + " ans");
+        System.out.println("3 - L'age moyen est de " + ageMoyen.getValue() + " ans");   //30
+
         Personne jacques = new Personne("Jacques", 60);
         lesPersonnes.add(jacques);
-        System.out.println("4 - L'age moyen est de " + ageMoyen.getValue() + " ans");
+        System.out.println("4 - L'age moyen est de " + ageMoyen.getValue() + " ans");   //40
+
         paul.setAge(100);
-        System.out.println("5 - L'age moyen est de " + ageMoyen.getValue() + " ans");
+        System.out.println("5 - L'age moyen est de " + ageMoyen.getValue() + " ans");   //60
+
         lesPersonnes.remove(paul);
-        System.out.println("6 - L'age moyen est de " + ageMoyen.getValue() + " ans");
+        System.out.println("6 - L'age moyen est de " + ageMoyen.getValue() + " ans");   //40
     }
 
     public static void question2() {
