@@ -1,5 +1,9 @@
-package fr.amu.iut.exercice5;
+package fr.amu.iut.exercice15;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -13,7 +17,11 @@ public class LoginControl extends GridPane {
     private PasswordField pwd;
 
     private void createBindings() {
-        // MÉTHODE À COMPLÉTER
+        BooleanProperty idTropCourt = new SimpleBooleanProperty(false);
+        if (userId.getText().length() < 6){
+            idTropCourt.set(true);
+        }
+        pwd.editableProperty().bind(Bindings.when(idTropCourt).then(false).otherwise(true));
     }
 
     @FXML
